@@ -1,1 +1,24 @@
-hiii everybooooooddddyyyyyy
+module "ec2_instance" {
+  source        = "./modules/ec2"
+    instance_type = "t2.micro"
+    }
+
+variable "instance_type" {
+  description = "EC2 instance type"
+   type        = strin
+     default     = "t2.micro"
+	  }
+
+instance_type = "t3.medium"
+region        = "us-east-1"
+
+terraform {
+  backend "s3" {
+      bucket         = "my-terraform-state"
+          key            = "dev/terraform.tfstate"
+	      region         = "us-east-1"
+	          dynamodb_table = "terraform-lock"
+		    }
+		    }
+
+		     
