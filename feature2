@@ -1,4 +1,31 @@
-module "ec2_instance" {
+variable "instance_type" {
+  default = "t2.micro"
+  }
+  
+  resource "aws_instance" "example" {
+    instance_type = var.instance_type
+    }variable "instance_type" {
+      default = "t2.micro"
+      }
+      
+      resource "aws_instance" "example" {
+        instance_type = var.instance_type
+	}terraform {
+	  backend "s3" {
+	      bucket         = "my-terraform-state"
+	          key            = "dev/terraform.tfstate"
+		      region         = "us-east-1"
+		          dynamodb_table = "terraform-lock"
+			    }
+			    }terraform {
+			      backend "s3" {
+			          bucket         = "prod-terraform-state"
+				      key            = "network/terraform.tfstate"
+				          region         = "us-east-1"
+					      dynamodb_table = "terraform-lock"
+					          encrypt        = true
+						    }
+						    }module "ec2_instance" {
   source        = "./modules/ec2"
     instance_type = "t2.micro"
     }
