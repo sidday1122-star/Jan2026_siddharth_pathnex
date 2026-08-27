@@ -1,0 +1,53 @@
+services:
+
+  postgres:
+    image: postgres:16
+
+    container_name: mastermind-postgres
+
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: mastermind_academy
+      POSTGRES_USER: mastermind
+      POSTGRES_PASSWORD: mastermind
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U mastermind -d mastermind_academy"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  backend:
+    build:
+      context: ./backend
+
+    container_name: mastermind-backend
+
+    restart: unless-stopped
+
+    environment:
+      DATABASE_URL: postgresql://mastermind:mastermind@postgres:5432/mastermind_academy
+
+    ports:
+      - "8000:8000"
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+
+volumes:
+
+  postgres_data:
